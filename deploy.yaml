@@ -1,0 +1,36 @@
+- hosts: localhost
+  vars:
+    VCSA_iso: /home/goneri/Downloads/VMware-VCSA-all-6.7.0-11726888.iso
+  tasks:
+  - debug:
+      var: playbook_dir
+  - name: Mount VMFS datastores to ESXi
+    vmware_host_datastore:
+        hostname: 192.168.123.5
+        username: root
+        password: root
+        datastore_name: esx_lab
+        datastore_type: nfs
+        nfs_server: 192.168.123.1
+        nfs_path: /srv/esx_lab
+        nfs_ro: no
+        vmfs_version: 6
+        esxi_hostname: esxi67
+        state: present
+        validate_certs: no
+  - name: Mount point
+    file:
+      name: mount
+      state: directory
+  - name: Mount DVD read-only
+    mount:
+      path: mount
+      src: '{{ VCSA_iso }}'
+      fstype: iso9660
+      opts: loop,ro
+      state: mounted
+    become: true
+  - name: Start the deployment of vCSA
+    shell: "./vcsa-deploy install -v --accept-eula --no-esx-ssl-verify --acknowledge-ceip {{ playbook_dir }}/vCSA_on_ESXi.json > {{ playbook_dir }}/vcsa.log 2>&1"
+    args:
+      chdir: "{{ playbook_dir }}/mount/vcsa-cli-installer/lin64" 

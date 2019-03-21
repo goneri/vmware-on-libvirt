@@ -1,0 +1,6 @@
+- distro: esxi-6.7
+  memory: 14096
+  vcpus: 2
+- distro: esxi-6.5
+  memory: 4096
+  swap: 0
