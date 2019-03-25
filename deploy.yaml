@@ -1,23 +1,28 @@
 - hosts: localhost
   vars:
-    VCSA_iso: /home/goneri/Downloads/VMware-VCSA-all-6.7.0-11726888.iso
+    VCSA_iso: "{{ lookup('env','HOME') }}/Downloads/VMware-VCSA-all-6.7.0-11726888.iso"
+    vcenter_hostname: '192.168.123.90'
+    vcenter_username: 'administrator@vsphere.local'
+    vcenter_password: '!234AaAa56'
+    datacenter_name: dc_ansible
+    datacenter_folder_name: vm1
+    datastore_name: esx_lab
   tasks:
-  - debug:
-      var: playbook_dir
   - name: Mount VMFS datastores to ESXi
     vmware_host_datastore:
-        hostname: 192.168.123.5
+        hostname: '{{ hostvars[item].ansible_host }}'
         username: root
         password: root
-        datastore_name: esx_lab
+        datastore_name: '{{ datastore_name }}'
         datastore_type: nfs
         nfs_server: 192.168.123.1
         nfs_path: /srv/esx_lab
         nfs_ro: no
         vmfs_version: 6
-        esxi_hostname: esxi67
+        esxi_hostname: '{{ item }}'
         state: present
         validate_certs: no
+    with_items: "{{ groups['all'] }}"
   - name: Mount point
     file:
       name: mount
@@ -30,7 +35,47 @@
       opts: loop,ro
       state: mounted
     become: true
+  - template:
+      src: vCSA_on_ESXi.json.j2
+      dest: /tmp/vCSA_on_ESXi.json
   - name: Start the deployment of vCSA
-    shell: "./vcsa-deploy install -v --accept-eula --no-esx-ssl-verify --acknowledge-ceip {{ playbook_dir }}/vCSA_on_ESXi.json > {{ playbook_dir }}/vcsa.log 2>&1"
+    shell: "./vcsa-deploy install -v --accept-eula --no-esx-ssl-verify --acknowledge-ceip /tmp/vCSA_on_ESXi.json > {{ playbook_dir }}/vcsa.log 2>&1"
     args:
-      chdir: "{{ playbook_dir }}/mount/vcsa-cli-installer/lin64" 
+      chdir: "{{ playbook_dir }}/mount/vcsa-cli-installer/lin64"
+      creates: "{{ playbook_dir }}/vcsa.log"
+
+  - name: Create Datacenter
+    vmware_datacenter:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ datacenter_name }}'
+      state: present
+      validate_certs: no
+
+
+  - name: Create Cluster
+    vmware_cluster:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ datacenter_name }}'
+      cluster_name: cluster
+      enable_ha: yes
+      enable_drs: yes
+      enable_vsan: yes
+      validate_certs: no
+
+  - name: Add ESXi Hosts to vCenter
+    vmware_host:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ datacenter_name }}'
+      cluster_name: cluster
+      esxi_hostname: '{{ hostvars[item].ansible_host }}'
+      esxi_username: 'root'
+      esxi_password: 'root'
+      state: present
+      validate_certs: no
+    with_items: "{{ groups['esxi-lab'] }}"

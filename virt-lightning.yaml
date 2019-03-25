@@ -1,6 +1,14 @@
-- distro: esxi-6.7
+- name: esxi-vcenter
+  distro: esxi-6.7
   memory: 14096
   vcpus: 2
-- distro: esxi-6.5
+- name: esxi-65-1
+  distro: esxi-6.5
   memory: 4096
-  swap: 0
+  vcpus: 2
+  groups: ['esxi-lab', 'esx-6.5']
+- name: esxi-67-1
+  distro: esxi-6.7
+  memory: 4096
+  vcpus: 2
+  groups: ['esxi-lab', 'esx-6.7']
