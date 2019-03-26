@@ -51,9 +51,15 @@
       opts: loop,ro
       state: mounted
     become: true
-  - template:
+
+# TODO restore the appliance, if it's available
+# [esx_lab] vCenter-Server-Appliance_5/vCenter-Server-Appliance_5.vmx
+
+  - name: Prepare the vCSA_on_ESXi.json
+    template:
       src: vCSA_on_ESXi.json.j2
       dest: /tmp/vCSA_on_ESXi.json
+
   - name: Start the deployment of vCSA
     shell: "./vcsa-deploy install -v --accept-eula --no-esx-ssl-verify --acknowledge-ceip /tmp/vCSA_on_ESXi.json > {{ playbook_dir }}/vcsa.log 2>&1"
     args:
@@ -69,6 +75,16 @@
       state: present
       validate_certs: no
 
+  - name: Create a VM folder on given Datacenter
+    vcenter_folder:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter: '{{ datacenter_name }}'
+      folder_name: my_vm
+      folder_type: vm
+      state: present
+      validate_certs: no
 
   - name: Create Cluster
     vmware_cluster:
@@ -77,9 +93,6 @@
       password: '{{ vcenter_password }}'
       datacenter_name: '{{ datacenter_name }}'
       cluster_name: cluster
-      enable_ha: yes
-      enable_drs: yes
-      enable_vsan: yes
       validate_certs: no
 
   - name: Add ESXi Hosts to vCenter
@@ -94,4 +107,43 @@
       esxi_password: 'root'
       state: present
       validate_certs: no
-    with_items: "{{ groups['esxi-lab'] }}"
+    with_items: "{{ groups['all'] }}"
+
+  - name: Create a snapshot of the vCenter
+    vmware_guest_snapshot:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter: '{{ datacenter_name }}'
+      name: "vCenter-Server-Appliance"
+      folder: 'my_vm'
+      state: present
+      snapshot_name: snap_vcenter
+      description: snap1_description
+      validate_certs: no
+
+  - name: Create a VM
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
+      validate_certs: no
+      folder: 'my_vm'
+      cluster: cluster
+      name: test_vm_0001
+      state: poweredon
+      guest_id: debian8_64Guest
+      disk:
+      - size_gb: 1
+        type: thin
+        datastore: '{{ datastore_name }}'
+      cdrom:
+        type: iso
+        iso_path: "[{{ datastore_name }}] isos/alpine-virt-3.9.2-x86_64.iso"
+      hardware:
+        memory_mb: 512
+        num_cpus: 1
+        scsi: paravirtual
+      wait_for_ip_address: yes
+      validate_certs: no
