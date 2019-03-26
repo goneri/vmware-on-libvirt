@@ -7,7 +7,23 @@
     datacenter_name: dc_ansible
     datacenter_folder_name: vm1
     datastore_name: esx_lab
+    nfs_dir: /srv/esx_lab
+    nfs_export: /etc/exports
+  handlers:
+  - name: reload NFS server
+    systemd:
+      name: nfs-server
+      state: restarted
+    become: true
   tasks:
+  - name: Export the NFS share
+    lineinfile:
+      path: /etc/exports
+      line: /srv/esx_lab 192.168.123.0/255.255.255.0(rw,anonuid=1000,anongid=1000)
+      regex: '^/srv/esx_lab'
+    notify: reload NFS server
+    become: true
+
   - name: Mount VMFS datastores to ESXi
     vmware_host_datastore:
         hostname: '{{ hostvars[item].ansible_host }}'
