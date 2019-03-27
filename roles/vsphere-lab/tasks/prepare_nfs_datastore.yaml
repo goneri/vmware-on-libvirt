@@ -1,0 +1,30 @@
+- name: Export the NFS share
+  lineinfile:
+    path: /etc/exports
+    line: /srv/esx_lab 192.168.123.0/255.255.255.0(rw,anonuid=1000,anongid=1000)
+    regex: '^/srv/esx_lab'
+  notify: reload NFS server
+  become: true
+
+- name: Ensure NFS server is running
+  systemd:
+    name: nfs-server
+    state: started
+
+- name: Mount VMFS datastores to ESXi
+  vmware_host_datastore:
+      hostname: '{{ hostvars[item].ansible_host }}'
+      username: root
+      password: root
+      datastore_name: '{{ datastore_name }}'
+      datastore_type: nfs
+      nfs_server: 192.168.123.1
+      nfs_path: /srv/esx_lab
+      nfs_ro: no
+      vmfs_version: 6
+      esxi_hostname: '{{ item }}'
+      state: present
+      validate_certs: no
+  with_items: "{{ groups['all'] }}"
+
+

@@ -1,0 +1,23 @@
+- name: Mount point
+  file:
+    name: mount
+    state: directory
+- name: Mount DVD read-only
+  mount:
+    path: mount
+    src: '{{ VCSA_iso }}'
+    fstype: iso9660
+    opts: loop,ro
+    state: mounted
+  become: true
+
+- name: Prepare the vCSA_on_ESXi.json
+  template:
+    src: vCSA_on_ESXi.json.j2
+    dest: /tmp/vCSA_on_ESXi.json
+
+- name: Start the deployment of vCSA
+  shell: "./vcsa-deploy install -v --accept-eula --no-esx-ssl-verify --acknowledge-ceip /tmp/vCSA_on_ESXi.json > {{ playbook_dir }}/vcsa.log 2>&1"
+  args:
+    chdir: "{{ playbook_dir }}/mount/vcsa-cli-installer/lin64"
+    creates: "{{ playbook_dir }}/vcsa.log"

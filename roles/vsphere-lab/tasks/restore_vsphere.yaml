@@ -1,0 +1,17 @@
+- name: reimport the vCenter VM
+  command: 'vim-cmd solo/registervm /vmfs/volumes/esx_lab/vCenter-Server-Appliance/vCenter-Server-Appliance.vmx'
+  delegate_to: esxi-vcenter
+  register: reimport_result
+  failed_when:
+  - "'vim.fault.AlreadyExists' not in reimport_result.stdout"
+  - reimport_result.rc != 0" 
+
+- name: Set the state of a virtual machine to poweroff
+  vmware_guest_powerstate:
+    hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
+    username: root
+    password: root
+    validate_certs: no
+    #    folder: /"{{ datacenter_name }}"/vm/my_folder
+    name: "vCenter-Server-Appliance"
+    state: powered-on

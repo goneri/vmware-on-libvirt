@@ -1,0 +1,14 @@
+- name: Create a snapshot of the vCenter
+  vmware_guest_snapshot:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ datacenter_name }}'
+    name: "vCenter-Server-Appliance"
+    folder: 'my_vm'
+    state: present
+    snapshot_name: snap_vcenter
+    description: snap1_description
+    validate_certs: no
+
+
