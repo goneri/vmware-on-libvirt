@@ -4,7 +4,7 @@
   register: reimport_result
   failed_when:
   - "'vim.fault.AlreadyExists' not in reimport_result.stdout"
-  - reimport_result.rc != 0" 
+  - "reimport_result.rc != 0"
 
 - name: Set the state of a virtual machine to poweroff
   vmware_guest_powerstate:
