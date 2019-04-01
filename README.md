@@ -1,7 +1,18 @@
 # Deploy ESXi+vsphere lab on libvirt
 
+## Description
+
+This playbook will:
+- Set up a NFS datastore in `/srv/esx_lab/` on the host machine
+- Deploy a local vsphere and two ESXi
+
+A full deployment of the VCSA (VSphere) from the ISO takes =~ 25 minutes. This
+is the reason why if a `vCenter-Server-Appliance` VM already exists on the
+datastore, it will be used.
+
 ## Requirements
 
+- A Linux system. Tested on Fedora 29
 - Ensure nested KVM is enabled
     ```shell
     cat /etc/modprobe.d/kvm.conf
@@ -18,4 +29,5 @@
     192.168.123.90 vcsa photon-machine
     ```
 - Download VMWare-VCSA ISO image, and keep the file in `~/Downloads`
+- Ansible 2.8
 - Start the `./run.sh`
