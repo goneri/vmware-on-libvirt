@@ -15,3 +15,13 @@
     #    folder: /"{{ datacenter_name }}"/vm/my_folder
     name: "vCenter-Server-Appliance"
     state: powered-on
+
+- name: 'Wait for the VSphere to be reachable (=~ 180s)'
+  uri:
+    method: HEAD
+    validate_certs: no
+    url: 'https://{{ vcenter_hostname }}'
+    register: uri_result
+    until: uri_result.status != 200
+    retries: 180
+    delay: 3
