@@ -24,4 +24,5 @@
     register: uri_result
     until: uri_result.status != 200
     retries: 180
-    delay: 3
+    delay: 10
+  failed_when: false
