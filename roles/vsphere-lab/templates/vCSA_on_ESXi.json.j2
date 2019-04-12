@@ -17,20 +17,20 @@
         "network": {
             "ip_family": "ipv4",
             "mode": "static",
-            "ip": "192.168.123.90",
+            "ip": "{{ vcenter_hostname }}",
             "dns_servers": [
-                "192.168.123.1"
+                "{{ vsphere_lab_dns_server }}"
             ],
             "prefix": "24",
-            "gateway": "192.168.123.1",
-            "system_name": "192.168.123.90"
+            "gateway": "{{ vsphere_lab_network_gateway }}",
+            "system_name": "{{ vcenter_hostname }}"
         },
         "os": {
-            "password": "!234AaAa56",
+            "password": "{{ vcenter_password }}",
             "ssh_enable": true
         },
         "sso": {
-            "password": "!234AaAa56",
+            "password": "{{ vcenter_password }}",
             "domain-name": "vsphere.local",
 	    "site-name": "vcsa"
         }
