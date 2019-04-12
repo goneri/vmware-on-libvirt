@@ -20,4 +20,4 @@
   shell: "./vcsa-deploy install -v --accept-eula --no-esx-ssl-verify --acknowledge-ceip /tmp/vCSA_on_ESXi.json > {{ playbook_dir }}/vcsa.log 2>&1"
   args:
     chdir: "{{ playbook_dir }}/mount/vcsa-cli-installer/lin64"
-    creates: "{{ playbook_dir }}/vcsa.log"
+    creates: "/tmp/vcsa.log"

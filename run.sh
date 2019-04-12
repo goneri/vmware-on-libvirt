@@ -1,5 +1,4 @@
 #!/bin/bash
-rm inventory
 vl up
-vl ansible_inventory > inventory
-ansible-playbook playbook.yml -i inventory
+vl ansible_inventory > ~/vshpere_lab.inventory
+ansible-playbook playbook.yml -i ~/vshpere_lab.inventory
