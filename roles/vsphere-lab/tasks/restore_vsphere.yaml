@@ -6,7 +6,7 @@
   - "'vim.fault.AlreadyExists' not in reimport_result.stdout"
   - "reimport_result.rc != 0"
 
-- name: Set the state of a virtual machine to poweroff
+- name: Set the state of a virtual machine to powered-on
   vmware_guest_powerstate:
     hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
     username: root
