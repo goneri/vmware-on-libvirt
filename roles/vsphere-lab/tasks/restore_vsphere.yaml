@@ -21,8 +21,8 @@
     method: HEAD
     validate_certs: no
     url: 'https://{{ vcenter_hostname }}'
-    register: uri_result
-    until: uri_result.status != 200
-    retries: 180
-    delay: 10
-  failed_when: false
+  retries: 100
+  delay: 10
+  until: uri_result | succeeded
+  register: uri_result
+- debug: var=uri_result
