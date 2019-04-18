@@ -12,6 +12,7 @@ datastore, it will be used.
 
 ## Requirements
 
+- Ansible 2.8
 - A Linux system. Tested on Fedora 29
 - Ensure nested KVM is enabled
     ```shell
