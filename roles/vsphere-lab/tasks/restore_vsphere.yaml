@@ -23,6 +23,6 @@
     url: 'https://{{ vcenter_hostname }}'
   retries: 100
   delay: 10
-  until: uri_result | succeeded
+  until: uri_result is succeeded
   register: uri_result
 - debug: var=uri_result
