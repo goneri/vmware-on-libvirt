@@ -3,7 +3,7 @@
   memory: 14096
   vcpus: 2
 - name: esxi-65-1
-  distro: esxi-6.5
+  distro: esxi-6.5.0
   memory: 4096
   vcpus: 2
   groups: ['esxi-lab', 'esx-6.5']
