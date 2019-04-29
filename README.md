@@ -22,7 +22,8 @@ datastore, it will be used.
     ```
 - Install [virt-lightning](https://github.com/virt-lightning/virt-lightning)
 - Build your images:
-    https://github.com/virt-lightning/esxi-cloud-images
+    - Follow the procedure described in https://github.com/virt-lightning/esxi-cloud-images
+    - copy the .qcow2 files in `/var/lib/virt-lightning/pool/upstream/`
 - VMWare-VCSA ISO image
 - Ansible 2.8
 
