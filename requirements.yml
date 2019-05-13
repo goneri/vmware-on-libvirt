@@ -1,0 +1,3 @@
+- src: https://github.com/goneri/ansible-role-vcenter-instance
+  version: master
+  name: vcenter-instance

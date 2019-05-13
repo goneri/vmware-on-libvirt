@@ -24,6 +24,8 @@ datastore, it will be used.
 - Build your images:
     - Follow the procedure described in https://github.com/virt-lightning/esxi-cloud-images
     - copy the .qcow2 files in `/var/lib/virt-lightning/pool/upstream/`
+- Install the roles:
+    `ansible-galaxy install -r requirements.yml -p roles`
 - VMWare-VCSA ISO image
 - Ansible 2.8
 
