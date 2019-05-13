@@ -1,12 +1,5 @@
 vsphere_lab_network_prefix: " {{ ansible_facts['virt_lightning']['ipv4']['address']|splitext|first }}"
 vsphere_lab_network_gateway: '{{ vsphere_lab_network_prefix }}.90'
-
-VCSA_iso: "{{ lookup('env','HOME') }}/Downloads/VMware-VCSA-all-6.7.0-11726888.iso"
-vcenter_hostname: '{{ vsphere_lab_network_prefix }}.90'
-vcenter_username: 'administrator@vsphere.local'
-vcenter_password: '!234AaAa56'
-datacenter_name: dc_ansible
-datacenter_folder_name: vm1
 datastore_name: esx_lab
 vsphere_lab_nfs_server: "{{ vsphere_lab_network_prefix }}.1"
 vsphere_lab_nfs_path: /srv/esx_lab

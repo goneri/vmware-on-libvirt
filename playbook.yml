@@ -1,3 +1,23 @@
 - hosts: localhost
+  vars:
+    vcenter_validate_certs: False
+    gather_facts: False
+    datastore_name: "nfs_1"
   roles:
-  - vsphere-lab
+  - role: vsphere-lab
+  - role: vcenter-instance
+    vars:
+      vcenter_instance:
+        installation:
+          #from: 'datastore'  # or datastore
+          from: 'iso'
+        network:  # IP Configuration of the vcenter
+          address: 192.168.123.90
+          prefix: 24
+          gateway: 192.168.123.1
+          dns: 192.168.123.1
+          hostname: 192.168.123.90
+        esxi:
+          hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
+          username: root
+          password: root

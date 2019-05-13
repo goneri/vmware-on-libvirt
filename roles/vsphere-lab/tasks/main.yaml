@@ -1,8 +1,2 @@
 ---
 - import_tasks: prepare_nfs_datastore.yaml
-- import_tasks: restore_vsphere.yaml
-  when: vshpere_lab_redeploy is not defined
-- import_tasks: create_vsphere.yaml
-  when: vshpere_lab_redeploy is defined
-#- import_tasks: postconfig.yaml
-#- import_tasks: start_vm.yaml
