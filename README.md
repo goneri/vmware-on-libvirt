@@ -13,7 +13,7 @@ datastore, it will be used.
 ## Requirements
 
 - Ansible 2.8
-- A Linux system. Tested on Fedora 29
+- A Linux system. Tested on Fedora 29 and 30.
 - Ensure nested KVM is enabled
     ```shell
     cat /etc/modprobe.d/kvm.conf
@@ -28,6 +28,10 @@ datastore, it will be used.
     `ansible-galaxy install -r requirements.yml -p roles`
 - VMWare-VCSA ISO image
 - Ansible 2.8
+
+## Warning
+
+The playbook will modify your `/etc/hosts`.
 
 ## Usage
 
