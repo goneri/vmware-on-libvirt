@@ -1,22 +1,87 @@
+- hosts: all_esxi
+  tasks:
+  - name: Turn off the firewall on the ESXi
+    command: esxcli network firewall set --enabled false
+
 - hosts: localhost
   vars:
     vcenter_validate_certs: False
     gather_facts: False
     datastore_name: "nfs_1"
-  roles:
-  - role: vsphere-lab
-  - role: vcenter-instance
+    vcsa_ip: '192.168.123.90'
+  tasks:
+  - name: add the host in /etc/hosts
+    lineinfile:
+      dest: /etc/hosts
+      regexp: '.*{{item}}.*'
+      line: "{{ hostvars[item].ansible_host }} {{item}}.lab {{item}}"
+      state: present
+    become: true
+    with_items: "{{ groups.all_esxi }}"
+
+  - name: add the vcsa host in /etc/hosts
+    lineinfile:
+      dest: /etc/hosts
+      regexp: '^{{ vcsa_ip }} vcsa\s.*'
+      line: "{{ vcsa_ip }} vcsa"
+      state: present
+    become: yes
+    with_items: "{{ groups.all_esxi }}"
+  - name: add the vcsa host in /etc/hosts
+    lineinfile:
+      dest: /etc/hosts
+      regexp: '^{{ vcsa_ip }} vcsa.lab\s.*'
+      line: "{{ vcsa_ip }} vcsa.lab"
+      state: present
+    become: true
+    with_items: "{{ groups.all_esxi }}"
+  - name: Reload the dnsmasq instances
+    command: sudo pkill -HUP dnsmasq
+    become: true
+  - name: Ensure we can resolve the vcsa host
+    command: host vcsa 192.168.123.1
+  - name: Ensure we can resolve the vcsa FQDN
+    command: host vcsa.lab 192.168.123.1
+  - name: Validate the reverse DNS resolution of the vcsa IP
+    shell: "nslookup {{ vcsa_ip }} 192.168.123.1|grep vcsa"
+  - name: Set NTP setting for all ESXi Host in given Cluster
+    vmware_host_ntp:
+      hostname: '{{ item }}'
+      username: 'root'
+      password: 'root'
+      esxi_hostname: '{{ item }}'
+      validate_certs: false
+      state: present
+      ntp_servers:
+          - 0.pool.ntp.org
+          - 1.pool.ntp.org
+    with_items: "{{ groups.all_esxi }}"
+
+  - name: Start ntpd setting for an ESXi Host
+    vmware_host_service_manager:
+      hostname: '{{ item }}'
+      username: 'root'
+      password: 'root'
+      esxi_hostname: '{{ item }}'
+      validate_certs: false
+      service_name: ntpd
+      state: present
+    with_items: "{{ groups.all_esxi }}"
+
+  - import_role:
+      name: vsphere-lab
+  - import_role:
+      name: vcenter-instance
     vars:
       vcenter_instance:
         installation:
-          #from: 'datastore'  # or datastore
           from: 'iso'
         network:  # IP Configuration of the vcenter
-          address: 192.168.123.90
+          address: '{{ vcsa_ip }}'
           prefix: 24
           gateway: 192.168.123.1
           dns: 192.168.123.1
-          hostname: 192.168.123.90
+          hostname: vcsa.lab
         esxi:
           hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
           username: root
