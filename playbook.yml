@@ -22,15 +22,15 @@
   - name: add the vcsa host in /etc/hosts
     lineinfile:
       dest: /etc/hosts
-      regexp: '^{{ vcsa_ip }} vcsa.test vcsa\s.*'
-      line: "{{ vcsa_ip }} vcsa.test vcsa"
+      regexp: '^{{ vcsa_ip }} vcenter.test vcenter\s.*'
+      line: "{{ vcsa_ip }} vcenter.test vcenter"
       state: present
     become: yes
   - name: add gateway.test (192.168.122.1) in too /etc/hosts
     lineinfile:
       dest: /etc/hosts
-      regexp: '^{{ vcsa_ip }} gateway.test gateway\s.*'
-      line: "{{ vcsa_ip }} gateway.test gateway"
+      regexp: '^192.168.122.1 gateway.test gateway\s.*'
+      line: "192.168.122.1 gateway.test gateway"
       state: present
     become: yes
 
@@ -42,7 +42,7 @@
   - name: Ensure we can resolve the vcsa FQDN
     command: host vcsa.test 192.168.122.1
   - name: Validate the reverse DNS resolution of the vcsa IP
-    shell: "nslookup {{ vcsa_ip }} 192.168.122.1|grep vcsa"
+    shell: "nslookup {{ vcsa_ip }} 192.168.122.1|grep vcenter"
   - name: Set NTP setting for all ESXi Host in given Cluster
     vmware_host_ntp:
       hostname: '{{ item }}'
@@ -78,7 +78,7 @@
           prefix: 24
           gateway: 192.168.122.1
           dns: 192.168.122.1
-          hostname: vcsa.test
+          hostname: vcenter.test
         esxi:
           hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
           username: root
