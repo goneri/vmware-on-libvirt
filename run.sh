@@ -30,11 +30,9 @@ function bootstrap_esxi() {
     sudo umount ${ESXI_MOUNT_POINT}
     echo "
 vmaccepteula
-# root/root
-rootpw --iscrypted \$6\$NMbwKGV6gtYGDdrC\$6rDKgLzLpmxuNd9YZcC5ErOjxMWj/PDJknAJYgMGMvmjC7MI0mh6FErmC/.XzKCB0au.uH.U7tz2eTxerqXEG/
+rootpw !234AaAa56
 install --firstdisk --overwritevmfs
-#network --bootproto=dhcp
-
+network --bootproto=dhcp
 %post --interpreter=busybox
 # Flush the network configuration
 echo 'vmx.allowNested = "TRUE"' >> /etc/vmware/config
