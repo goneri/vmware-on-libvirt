@@ -1,7 +1,0 @@
-vsphere_lab_network_prefix: " {{ ansible_facts['virt_lightning']['ipv4']['address']|splitext|first }}"
-vsphere_lab_network_gateway: '{{ vsphere_lab_network_prefix }}.90'
-datastore_name: esx_lab
-vsphere_lab_nfs_server: "{{ vsphere_lab_network_prefix }}.1"
-vsphere_lab_nfs_path: /srv/esx_lab
-vsphere_lab_nfs_export: /etc/exports
-vsphere_lab_dns_server: "{{ vsphere_lab_network_prefix }}.1"

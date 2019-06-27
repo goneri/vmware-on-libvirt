@@ -12,28 +12,43 @@ datastore, it will be used.
 
 ## Requirements
 
-- Ansible 2.8
 - A Linux system. Tested on Fedora 29 and 30.
+- Libvirt and virt-install.
+- ESXi ISO image
+- Ansible 2.8
+
+## First deployment
+
 - Ensure nested KVM is enabled
     ```shell
     cat /etc/modprobe.d/kvm.conf
     options kvm_intel nested=1 enable_apicv=n
     options kvm ignore_msrs=1
     ```
-- Install [virt-lightning](https://github.com/virt-lightning/virt-lightning)
-- Build your images:
-    - Follow the procedure described in https://github.com/virt-lightning/esxi-cloud-images
-    - copy the .qcow2 files in `/var/lib/virt-lightning/pool/upstream/`
 - Install the roles:
     `ansible-galaxy install -r requirements.yml -p roles`
-- VMWare-VCSA ISO image
-- Ansible 2.8
+- Download VMWare-VCSA ISO image and copy it in `isos/VMware-VMvisor-Installer-6.7.0-8169922.x86_64.iso`
+- Run `run.sh`. The full run takes around 1h, the VCSA (vcenter) deployment itself takes =~ 45m.
+
+### Outs
+
+By default, the scrip will prepare 3 ESXi VM, it will also deploy a VCSA (vcenter) host in a nested VM on `esxi-vcenter`.
+
+- esxi-vcenter
+    - IP: 192.168.122.80
+    - Memory: 14096MB
+    - Disk: 40GiB
+- esxi1
+    - IP: 192.168.122.81
+    - Memory: 4096MB
+    - Disk: 10GiB
+- esxi2
+    - IP: 192.168.122.82
+    - Memory: 4096MB
+    - Disk: 10GiB10
+- vcsa
+    - IP: 192.168.122.90
 
 ## Warning
 
-The playbook will modify your `/etc/hosts`.
-
-## Usage
-
-- Keep the VMWare-CSA ISO file in `~/Downloads` or change the parameter in `roles/vsphere-lab/defaults/main.yaml`
-- Start the `./run.sh`
+The playbook will modify your `/etc/hosts` to add the esxi and vcsa hosts.
