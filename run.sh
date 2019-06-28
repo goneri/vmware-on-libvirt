@@ -62,7 +62,8 @@ EOL" > /tmp/ks_cust_${NAME}.cfg
         --vcpus=sockets=1,cores=2,threads=2 \
         --cpu host --disk path=/var/lib/libvirt/images/${NAME}.qcow2,size=${SIZE},sparse=yes \
         -c ${TMPDIR}/new.iso --os-type generic \
-        --accelerate --network=network:default,model=e1000 \
+        --accelerate \
+        --network=network:default,model=e1000 --network=network:default,model=e1000 \
         --hvm --graphics vnc,listen=0.0.0.0 --noreboot
     sleep 30
     virsh -c qemu:///system start ${NAME}
