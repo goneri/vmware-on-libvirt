@@ -49,7 +49,7 @@ esxcli network ip interface ipv4 set -i vmk0 -I ${IPV4} -N 255.255.255.0 -t stat
 esxcli network ip route ipv4 add -g 192.168.122.1 -n default
 esxcli network ip dns server add --server 192.168.122.1
 esxcli system hostname set --host=${NAME}
-esxcli system hostname set --fqdn=${NAME}.lab
+esxcli system hostname set --fqdn=${NAME}.test
 
 EOL" > /tmp/ks_cust_${NAME}.cfg
     sudo cp /tmp/ks_cust_${NAME}.cfg ${TARGET_ISO}/ks_cust.cfg
