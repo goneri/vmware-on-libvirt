@@ -30,7 +30,8 @@ function bootstrap_esxi() {
     sudo umount ${ESXI_MOUNT_POINT}
     echo "
 vmaccepteula
-rootpw !234AaAa56
+# pw: !234AaAa56
+rootpw --iscrypted \$1\$0Qv5O3cS\$0sOPyGcne6I1/c20P2PNo/
 install --firstdisk --overwritevmfs
 network --bootproto=dhcp
 %post --interpreter=busybox

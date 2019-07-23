@@ -46,8 +46,8 @@
   - name: Set NTP setting for all ESXi Host in given Cluster
     vmware_host_ntp:
       hostname: '{{ item }}'
-      username: 'root'
-      password: 'root'
+      username: root
+      password: '!234AaAa56'
       esxi_hostname: '{{ item }}'
       validate_certs: false
       state: present
@@ -59,8 +59,8 @@
   - name: Start ntpd setting for an ESXi Host
     vmware_host_service_manager:
       hostname: '{{ item }}'
-      username: 'root'
-      password: 'root'
+      username: root
+      password: '!234AaAa56'
       esxi_hostname: '{{ item }}'
       validate_certs: false
       service_name: ntpd
@@ -82,5 +82,5 @@
         esxi:
           hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
           username: root
-          password: root
+          password: '!234AaAa56'
           datastore_name: datastore1
