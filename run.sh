@@ -8,6 +8,7 @@ function bootstrap_esxi() {
     IPV4=$3
     MEMORY=$4
     SIZE=$5
+    VCPUS=$6
 
     virsh -c qemu:///system dominfo ${NAME} && return
     # We use the label of the ISO image
@@ -59,7 +60,7 @@ EOL" > /tmp/ks_cust_${NAME}.cfg
     sudo sed -i 's,TIMEOUT 80,TIMEOUT 1,' ${TARGET_ISO}/isolinux.cfg
     sudo genisoimage -relaxed-filenames -J -R -o ${TMPDIR}/new.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e efiboot.img -no-emul-boot ${TARGET_ISO}
     virt-install --connect qemu:///system \
-        -n ${NAME} -r ${MEMORY} \
+        -n ${NAME} -r ${MEMORY} --vcpus ${VCPUS}\
         --vcpus=sockets=1,cores=2,threads=2 \
         --cpu host --disk path=/var/lib/libvirt/images/${NAME}.qcow2,size=${SIZE},sparse=yes \
         -c ${TMPDIR}/new.iso --os-type generic \
@@ -72,8 +73,8 @@ EOL" > /tmp/ks_cust_${NAME}.cfg
 
 DEFAULT_ISO=isos/VMware-VMvisor-Installer-6.7.0-8169922.x86_64.iso
 
-bootstrap_esxi ${DEFAULT_ISO} esxi-vcenter 192.168.122.80 14096 40
-bootstrap_esxi ${DEFAULT_ISO} esxi1 192.168.122.81 4096 10
-bootstrap_esxi ${DEFAULT_ISO} esxi2 192.168.122.82 4096 10
+bootstrap_esxi ${DEFAULT_ISO} esxi-vcenter 192.168.122.80 14096 40 2
+bootstrap_esxi ${DEFAULT_ISO} esxi1 192.168.122.81 4096 10 1
+bootstrap_esxi ${DEFAULT_ISO} esxi2 192.168.122.82 4096 10 1
 
 ansible-playbook playbook.yml -vvvvv -i vshpere_lab.inventory
