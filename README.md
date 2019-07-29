@@ -37,14 +37,17 @@ By default, the scrip will prepare 3 ESXi VM, it will also deploy a VCSA (vcente
 - esxi-vcenter
     - IP: 192.168.122.80
     - Memory: 14096MB
+    - CPU: 2
     - Disk: 40GiB
 - esxi1
     - IP: 192.168.122.81
     - Memory: 4096MB
+    - CPU: 1
     - Disk: 10GiB
 - esxi2
     - IP: 192.168.122.82
     - Memory: 4096MB
+    - CPU: 1
     - Disk: 10GiB10
 - vcsa
     - IP: 192.168.122.90
