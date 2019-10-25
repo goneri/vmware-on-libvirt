@@ -73,6 +73,7 @@
       vcenter_instance:
         installation:
           from: 'iso'
+          iso_path: /home/goneri/Downloads/VMware-VCSA-all-6.7.0-14367737.iso
         network:  # IP Configuration of the vcenter
           address: '{{ vcsa_ip }}'
           prefix: 24
