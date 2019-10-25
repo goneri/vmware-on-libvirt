@@ -1,3 +1,4 @@
 playbook.retry
 roles/vcenter-instance/
 vcsa.log
+vshpere_lab.inventory
