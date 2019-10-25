@@ -38,9 +38,9 @@
     command: sudo pkill -HUP dnsmasq
     become: true
   - name: Ensure we can resolve the vcsa host
-    command: host vcsa 192.168.123.1
+    command: host vcenter 192.168.123.1
   - name: Ensure we can resolve the vcsa FQDN
-    command: host vcsa.test 192.168.123.1
+    command: host vcenter.test 192.168.123.1
   - name: Validate the reverse DNS resolution of the vcsa IP
     shell: "nslookup {{ vcsa_ip }} 192.168.123.1|grep vcenter"
   - name: Set NTP setting for all ESXi Host in given Cluster
