@@ -1,22 +1,35 @@
 - name: esxi-vcenter
-  distro: esxi-6.7U3
+  distro: esxi-6.7.0-20190802001-STANDARD
   memory: 12000
   root_disk_size: 30
   vcpus: 2
   root_password: '!234AaAa56'
   groups: ['all_esxi']
+  networks:
+  - network: virt-lightning
+    nic_model: e1000
 - name: esxi1
-  distro: esxi-6.7U3
+  distro: esxi-6.7.0-20190802001-STANDARD
   memory: 4096
   vcpus: 1
   root_password: '!234AaAa56'
   groups: ['all_esxi', 'esxi_lab']
+  networks:
+  - network: virt-lightning
+    nic_model: e1000
+  - network: default
+    nic_model: e1000
 - name: esxi2
-  distro: esxi-6.7U3
+  distro: esxi-6.7.0-20190802001-STANDARD
   memory: 4096
   vcpus: 1
   root_password: '!234AaAa56'
   groups: ['all_esxi', 'esxi_lab']
+  networks:
+  - network: virt-lightning
+    nic_model: e1000
+  - network: default
+    nic_model: e1000
 - name: datastore
   distro: rhel-8.0
   memory: 1024
