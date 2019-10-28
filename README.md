@@ -27,7 +27,7 @@ datastore, it will be used.
     ```
 - Install the roles:
     `ansible-galaxy install -r requirements.yml -p roles`
-- Download VMWare-VCSA ISO image and copy it in `isos/VMware-VMvisor-Installer-6.7.0-8169922.x86_64.iso`
+- Download VMWare-VCSA ISO image and copy it in `~/Downloads/VMware-VCSA-all-6.7.0-14367737.iso`
 - Run `run.sh`. The full run takes around 1h, the VCSA (vcenter) deployment itself takes =~ 45m.
 
 ### Outs
