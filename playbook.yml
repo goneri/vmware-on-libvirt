@@ -17,7 +17,7 @@
       line: "{{ hostvars[item].ansible_host }} {{item}}.test {{item}}"
       state: present
     become: true
-    with_items: "{{ groups.all_esxi }}"
+    with_items: "{{ groups.all }}"
 
   - name: add the vcsa host in /etc/hosts
     lineinfile:
