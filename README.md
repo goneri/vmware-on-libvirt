@@ -2,19 +2,19 @@
 
 ## Description
 
-This playbook will:
-- Set up a NFS datastore in `/srv/esx_lab/` on the host machine
-- Deploy a local vsphere and two ESXi
+This playbook will deploy:
 
-A full deployment of the VCSA (VSphere) from the ISO takes =~ 25 minutes. This
-is the reason why if a `vCenter-Server-Appliance` VM already exists on the
-datastore, it will be used.
+- a local vsphere (in an ESXi)
+- two ESXi
+- a datastore VM (with a NFS)
+
+A full deployment of the VCSA (VSphere) from the ISO takes =~ 25 minutes.
 
 ## Requirements
 
-- A Linux system. Tested on Fedora 29 and 30.
-- Libvirt and virt-install.
-- ESXi ISO image
+- A Linux system. Tested on Fedora 30 and Ubuntu 18.04.
+- Virt-Lightning (https://virt-lightning.org/) and libvirt
+- ESXi QCOW2 image (https://github.com/virt-lightning/esxi-cloud-images)
 - Ansible 2.8
 
 ## First deployment
@@ -35,22 +35,19 @@ datastore, it will be used.
 By default, the scrip will prepare 3 ESXi VM, it will also deploy a VCSA (vcenter) host in a nested VM on `esxi-vcenter`.
 
 - esxi-vcenter
-    - IP: 192.168.122.80
-    - Memory: 14096MB
+    - Memory: 12000MB
     - CPU: 2
     - Disk: 40GiB
 - esxi1
-    - IP: 192.168.122.81
     - Memory: 4096MB
     - CPU: 1
     - Disk: 10GiB
 - esxi2
-    - IP: 192.168.122.82
     - Memory: 4096MB
     - CPU: 1
     - Disk: 10GiB10
-- vcsa
-    - IP: 192.168.122.90
+- vcenter
+    - IP: 192.168.123.90
 
 ## Warning
 
