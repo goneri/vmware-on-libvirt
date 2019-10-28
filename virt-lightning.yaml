@@ -17,3 +17,9 @@
   vcpus: 1
   root_password: '!234AaAa56'
   groups: ['all_esxi', 'esxi_lab']
+- name: datastore
+  distro: rhel-8.0
+  memory: 1024
+  vcpus: 1
+  root_password: '!234AaAa56'
+  groups: ['datastore']
