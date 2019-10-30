@@ -106,43 +106,5 @@
 #      export_dir: /home/goneri/tmp/
 
 - hosts: datastore
-  tasks:
-  - name: Prepare the NFS shares
-    file:
-        path: '{{ item }}'
-        state: directory
-        owner: 1000
-        group: 1000
-    with_items:
-        - /srv/share/vms
-        - /srv/share/isos
-    become: True
-
-  - name: Download ISO
-    get_url:
-      url: '{{ item.url }}'
-      dest: '/srv/share/isos/{{ item.name }}'
-      mode: '0644'
-    with_items:
-        - name: fedora.iso
-          url: https://download.fedoraproject.org/pub/fedora/linux/releases/30/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-30-1.2.iso
-        - name: centos.iso
-          url: http://isoredirect.centos.org/centos/8/isos/x86_64/CentOS-8-x86_64-1905-dvd1.iso
-
-  - name: Prepare the /etc/exports file
-    copy:
-        dest: /etc/exports
-        content: |
-           /srv/share 192.168.123.0/255.255.255.0(rw,anonuid=1000,anongid=1000)
-    become: True
-    notify:
-        - Restart nfs-server
-
-  handlers:
-  - name: Restart nfs-server
-    systemd:
-      state: restarted
-      enabled: True
-      name: nfs-server
-    become: True
-
+  roles:
+    - role: vmware-ci-nfs-share

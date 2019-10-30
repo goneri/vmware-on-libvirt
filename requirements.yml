@@ -1,3 +1,6 @@
 - src: https://github.com/goneri/ansible-role-vcenter-instance
   version: master
   name: vcenter-instance
+- src: https://github.com/goneri/ansible-role-vmware-ci-nfs-share
+  version: master
+  name: vmware-ci-nfs-share
