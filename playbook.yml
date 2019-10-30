@@ -84,7 +84,7 @@
           hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
           username: root
           password: '!234AaAa56'
-          datastore_name: datastore1
+          datastore_name: local
 
 #  - name: set state to poweroff on the tested VM
 #    vmware_guest_powerstate:
