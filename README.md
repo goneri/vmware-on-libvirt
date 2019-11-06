@@ -1,3 +1,6 @@
+Please see instead: https://github.com/goneri/deploy-vmware-ci
+
+
 # Deploy ESXi+vsphere lab on libvirt
 
 ## Description
